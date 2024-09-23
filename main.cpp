@@ -166,19 +166,19 @@ int MyList :: Size() const {
     return size;
 }
 
-// // find if a node exists in the list
-// // returns true if found, false otherwise
-// bool MyList :: Find(int target) {
-//     Node *curr = this->head;
-//     bool found = false;
-//     while (curr != nullptr && !found) {
-//         if (curr->data == target)
-//             found = true;
-//         else
-//             curr = curr->next;
-//     }
-//     return found;
-// }
+ // find if a node exists in the list
+ // returns true if found, false otherwise
+     bool MyList :: Find(int target) {
+         Node *curr = this->head;
+         bool found = false;
+         while (curr != nullptr && !found) {
+             if (curr->data == target)
+                 found = true;
+             else
+                 curr = curr->next;
+         }
+         return found;
+     }
 
 // check if list is empty, returns true if so, false otherwise
 bool MyList :: IsEmpty() const {
@@ -203,22 +203,35 @@ Node* merge(Node* left, Node* right); // merge two sorted lists and returns the 
 */
 
 void MyList::reset() {
-
+    this->head = nullptr;
 }
 
 int MyList::peekHead() {
-
+    return this->head->data;
 }
 
 int MyList::peekTail() {
-
+    Node *curr = this->head;
+    while (curr->next != nullptr){
+        curr = curr->next;
+    }
+    return curr->data;
 }
 
 int& MyList::at(int i) {
-
+    Node *curr = this->head;
+    for (int ii=0; ii<i; ii++){
+        curr = curr->next;
+    }
+    return curr->data;
 }
 
 int& MyList::operator[](int i) {
+    Node *curr = this->head;
+    for (int ii=0; ii<i; ii++){
+        curr = curr->next;
+    }
+    return curr->data;
 
 }
 
@@ -239,7 +252,7 @@ bool MyList::operator==(const MyList &toCompare) {
 }
 
 Node* MyList::merge(Node *left, Node *right) {
-    
+
 }
 
 int main () {
@@ -263,6 +276,30 @@ int main () {
     cout << "Reverse: ";
     list.Reverse();
     cout << endl; // 3 - 2 - 1
+
+    // test reset
+    cout << "Before reset: ";
+    list.Traverse();
+    list.reset();
+    cout << "After reset: ";
+    list.Traverse();
+
+    // test peekHead
+    list.Insert(1);
+    list.Insert(2);
+    list.Insert(3);
+    cout << "peakHead: " << list.peekHead() << endl;
+
+    // test peekTail
+    cout << "peakTail: " << list.peekTail() << endl;
+
+    // test at
+    cout << "at index 2: " << list.at(2) << endl;
+
+    // test [] operator
+    cout << "list[2]: " << list[2] << endl;
+
+
 
     return 0;
 }
