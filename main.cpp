@@ -286,7 +286,13 @@ int MyList::remove(int target) {
 }
 
 int MyList::removeHead() {
+    if (head == nullptr) {
+        throw runtime_error("List is empty");
+    }
 
+    int retValue = head->data;
+    head = head->next;
+    return retValue;
 }
 
 int MyList::removeTail() {
@@ -358,6 +364,14 @@ int main () {
     cout << "After removal: ";
     list.Traverse();
 
+    // test removeHead
+    list.Insert(1);
+    list.Insert(2);
+    list.Insert(3);
+    cout << "before removeHead: ";
+    list.Traverse();
+    cout << "After removeHead, output: " << list.removeHead();
+    list.Traverse();
 
 
     return 0;
