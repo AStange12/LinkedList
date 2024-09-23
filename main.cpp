@@ -195,7 +195,7 @@ int peekHead();          // this function returns the data at the head node
 int peekTail();          // this function returns the data at the tail node
 int& at(int i);          // this function returns the data at a given position (index)
 int& operator[](int i);  // same as above, operator[]
-int remove(int target);  // remove a target node annd returns it if successful
+int remove(int target);  // remove a target node and returns it if successful
 int removeHead();        // remove the head node in the list
 int removeTail();        // remove the tail node in the list
 bool operator==(const MyList& toCompare);  // operator==, returns true if the calling object is exactly the same as toCompare
@@ -203,14 +203,30 @@ Node* merge(Node* left, Node* right); // merge two sorted lists and returns the 
 */
 
 void MyList::reset() {
-    this->head = nullptr;
+    Node *temp;  // temporary to delete each node
+    Node *cur;   // for traversing
+    cur = this->head;
+
+    while (cur != nullptr) {
+        // delete one node at a time
+        temp = cur;
+        cur = cur->next;
+        delete temp;
+    }
+    head = nullptr;
 }
 
 int MyList::peekHead() {
+    if (head == nullptr) {
+        throw runtime_error("List is empty");
+    }
     return this->head->data;
 }
 
 int MyList::peekTail() {
+    if (head == nullptr) {
+        throw runtime_error("List is empty");
+    }
     Node *curr = this->head;
     while (curr->next != nullptr){
         curr = curr->next;
@@ -221,6 +237,9 @@ int MyList::peekTail() {
 int& MyList::at(int i) {
     Node *curr = this->head;
     for (int ii=0; ii<i; ii++){
+        if (curr == nullptr) {
+            throw runtime_error("index out of bound");
+        }
         curr = curr->next;
     }
     return curr->data;
@@ -229,14 +248,41 @@ int& MyList::at(int i) {
 int& MyList::operator[](int i) {
     Node *curr = this->head;
     for (int ii=0; ii<i; ii++){
+        if (curr == nullptr) {
+            throw runtime_error("index out of bound");
+        }
         curr = curr->next;
     }
     return curr->data;
-
 }
 
 int MyList::remove(int target) {
+    if (head == nullptr) {
+        throw runtime_error("List is empty");
+    }
 
+    int retValue;
+
+    if (target == 0) {
+        retValue = head->data;
+        head = head->next;
+        return retValue;
+    }
+
+    Node *curr = head;
+    Node *prev = nullptr;
+
+    for (int i=0; i<target; i++){
+        if (curr == nullptr) {
+            throw runtime_error("index out of bound");
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+
+    retValue = curr->data;
+    prev->next = curr->next;
+    return retValue;
 }
 
 int MyList::removeHead() {
@@ -298,6 +344,19 @@ int main () {
 
     // test [] operator
     cout << "list[2]: " << list[2] << endl;
+
+    // test remove target
+    cout << "Before removal: ";
+    list.Traverse();
+    cout << "remove index 1, value:" << list.remove(1) << endl;
+    cout << "After removal: ";
+    list.Traverse();
+    cout << "remove index 1 again, value:" << list.remove(1) << endl;
+    cout << "After removal: ";
+    list.Traverse();
+    cout << "remove index 0, value:" << list.remove(0) << endl;
+    cout << "After removal: ";
+    list.Traverse();
 
 
 
